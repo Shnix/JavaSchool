@@ -2,6 +2,8 @@ package entity;
 
 import enums.DriverStatus;
 import enums.DriverType;
+import enums.VehicleType;
+import exception.VehicleTypeException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -39,15 +41,34 @@ public class Driver {
     @Enumerated(EnumType.STRING)
     private DriverStatus status;
 
-    @Column(name = "city")
-    @NotNull
+    @OneToOne
+    @JoinColumn(name = "city")
     private City currentCity;
 
-    @Column(name = "vehicle")
-    @NotNull
+    @OneToOne
+    @JoinColumn(name = "vehicle")
     private Vehicle vehicle;
 
-    @Column(name = "order")
-    @NotNull
-    private Order orders;
+    @ManyToOne
+    @JoinColumn(name = "`order`")
+    private Order order;
+
+    public Driver(String firstName,String lastName, DriverType driverType,int workingHours, DriverStatus status,City currentCity) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.driverType = driverType;
+        this.workingHours = workingHours;
+        this.status = status;
+        this.currentCity = currentCity;
+    }
+
+    public void setVehicle(Vehicle vehicle) throws VehicleTypeException {
+        if(this.getDriverType()==DriverType.PILOT&&vehicle.getVehicleType()== VehicleType.BOAT){
+            throw new VehicleTypeException();
+        }
+        if(this.getDriverType()==DriverType.SAILOR&&vehicle.getVehicleType()== VehicleType.PLAIN){
+            throw new VehicleTypeException();
+        }
+        this.vehicle = vehicle;
+    }
 }

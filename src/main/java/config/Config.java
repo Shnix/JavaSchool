@@ -1,15 +1,18 @@
-package dao;
+package config;
 
 import entity.*;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-abstract class AbstractDao<T> implements Dao<T> {
+import java.sql.DriverManager;
 
-    SessionFactory sessionFactory;
+@Configuration
+public class Config {
 
-    AbstractDao() {
-        this.sessionFactory =  new Configuration()
+    @Bean
+    public SessionFactory sessionFactory(){
+        SessionFactory factory = new org.hibernate.cfg.Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Driver.class)
                 .addAnnotatedClass(Order.class)
@@ -18,5 +21,6 @@ abstract class AbstractDao<T> implements Dao<T> {
                 .addAnnotatedClass(Vehicle.class)
                 .addAnnotatedClass(Waypoint.class)
                 .buildSessionFactory();
+        return factory;
     }
 }

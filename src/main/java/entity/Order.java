@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -25,15 +24,18 @@ public class Order  {
     private boolean isComplete;
 
     @OneToMany
-    @JoinTable(name = "waypoints")
-    private SortedSet<Waypoint> waypoints;
+    private Set<Waypoint> waypoints;
 
-    @Column(name = "vehicle")
-    @NotNull
+    @OneToOne
+    @JoinColumn(name = "vehicle")
     private Vehicle vehicle;
 
     @OneToMany
-    @JoinTable(name = "drivers")
     private Set<Driver> drivers;
 
+    public Order(boolean isComplete) {
+        this.isComplete = isComplete;
+        this.waypoints = new LinkedHashSet<>();
+        this.drivers = new HashSet<>();
+    }
 }

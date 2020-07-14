@@ -18,19 +18,26 @@ public class Waypoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "city")
-    @NotNull
+    @OneToOne
+    @JoinColumn(name = "city")
     private City city;
 
-    @Column(name = "cargo")
-    @NotNull
+    @OneToOne
+    @JoinColumn(name = "cargo")
     private  Cargo cargo;
 
     @Column(name = "operationType")
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
 
-    @Column(name = "order")
-    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "`order`")
     private Order order;
+
+    public Waypoint(City city,Cargo cargo, OperationType operationType,Order order) {
+        this.city = city;
+        this.cargo = cargo;
+        this.operationType = operationType;
+        this.order = order;
+    }
 }
