@@ -1,5 +1,6 @@
 package entity;
 
+import dto.DriverDto;
 import enums.DriverStatus;
 import enums.DriverType;
 import enums.VehicleType;
@@ -8,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -22,11 +22,9 @@ public class Driver {
     private int id;
 
     @Column(name = "firstName")
-    @NotNull
     private String firstName;
 
     @Column(name = "lastName")
-    @NotNull
     private String lastName;
 
     @Column(name = "driverType")
@@ -34,7 +32,6 @@ public class Driver {
     private DriverType driverType;
 
     @Column(name = "workingHours")
-    @NotNull
     private int workingHours;
 
     @Column(name = "driverStatus")
@@ -49,7 +46,7 @@ public class Driver {
     @JoinColumn(name = "vehicle")
     private Vehicle vehicle;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "`order`")
     private Order order;
 

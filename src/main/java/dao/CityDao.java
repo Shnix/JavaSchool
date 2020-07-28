@@ -3,36 +3,14 @@ package dao;
 
 import entity.*;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class CityDao extends AbstractDao<City> {
 
-    public void add(City city){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.save(city);
-        session.getTransaction().commit();
-        session.close();
-    }
-
-    @Override
-    public void delete(City city) {
-
-    }
-
-    @Override
-    public void update(City city) {
-
-    }
-
-    @Override
-    public List<City> list() {
-        return null;
-    }
 
     public City getById(int id){
         Session session = this.sessionFactory.getCurrentSession();

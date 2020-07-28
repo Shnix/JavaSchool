@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cargoes")
@@ -16,14 +15,12 @@ public class Cargo {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int code;
+    private int id;
 
     @Column(name = "name")
-    @NotNull
     private String name;
 
     @Column(name = "weight")
-    @NotNull
     private int weight;
 
     @Column(name = "cargoStatus")
@@ -35,4 +32,5 @@ public class Cargo {
         this.weight = weight;
         this.cargoStatus = cargoStatus;
     }
+
 }

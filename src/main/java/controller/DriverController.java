@@ -1,8 +1,6 @@
 package controller;
 
-import dao.DriverDao;
 import dto.DriverDto;
-import entity.Driver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.DriverService;
@@ -12,19 +10,34 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/drivers")
 public class DriverController {
 
-
-    @Autowired
     DriverService driverService;
 
-    @GetMapping("/drivers")
-    public List<DriverDto> hey(){
-         return driverService.getAllDrivers();
+    @Autowired
+    public DriverController(DriverService driverService) {
+        this.driverService=driverService;
     }
 
-    @DeleteMapping("drivers/{id}")
+    @GetMapping("")
+    public List<DriverDto> hey(){
+        return driverService.getAllDrivers();
+    }
+
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable String id){
         driverService.deleteDriver(id);
     }
+
+    @PostMapping("/add")
+    public void add(@RequestBody DriverDto driverDto){
+        driverService.addDriver(driverDto);
+    }
+
+    @PostMapping("/update/{id}")
+    public void update(@PathVariable int id ,@RequestBody DriverDto driverDto){
+        driverService.update(id,driverDto);
+    }
+
 }

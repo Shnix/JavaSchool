@@ -5,16 +5,14 @@ import enums.VehicleCondition;
 import enums.VehicleType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "vehicles")
-public class Vehicle {
+public class Vehicle  {
 
     @Id
     @Column(name = "id")
@@ -22,7 +20,6 @@ public class Vehicle {
     private int id;
 
     @Column(name = "name")
-    @NotNull
     private String name;
 
     @Column(name = "vehicleType")
@@ -30,11 +27,9 @@ public class Vehicle {
     private VehicleType vehicleType;
 
     @Column(name = "driversCount")
-    @NotNull
     private int driversCount;
 
     @Column(name = "capacityInTons")
-    @NotNull
     private int capacityInTons;
 
     @OneToOne

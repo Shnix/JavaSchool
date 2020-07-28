@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import java.util.*;
 
@@ -12,7 +11,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders")
-public class Order  {
+public class Order {
 
     @Id
     @Column(name = "id")
@@ -20,17 +19,16 @@ public class Order  {
     private int id;
 
     @Column(name = "isComplete")
-    @NotNull
     private boolean isComplete;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<Waypoint> waypoints;
 
     @OneToOne
     @JoinColumn(name = "vehicle")
     private Vehicle vehicle;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order")
     private Set<Driver> drivers;
 
     public Order(boolean isComplete) {
@@ -39,3 +37,4 @@ public class Order  {
         this.drivers = new HashSet<>();
     }
 }
+

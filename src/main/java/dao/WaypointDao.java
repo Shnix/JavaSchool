@@ -1,32 +1,18 @@
 package dao;
 
 import entity.Waypoint;
+import org.hibernate.Session;
 
 import java.util.List;
 
 public class WaypointDao extends AbstractDao<Waypoint> {
-    @Override
-    public void add(Waypoint waypoint) {
-
-    }
-
-    @Override
-    public void delete(Waypoint waypoint) {
-
-    }
-
-    @Override
-    public void update(Waypoint waypoint) {
-
-    }
-
-    @Override
-    public List<Waypoint> list() {
-        return null;
-    }
 
     @Override
     public Waypoint getById(int id) {
-        return null;
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        Waypoint waypoint = (Waypoint) session.load(Waypoint.class, id);
+        session.getTransaction().commit();
+        return waypoint;
     }
 }

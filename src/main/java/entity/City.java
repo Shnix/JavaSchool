@@ -5,13 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "cities")
-public class City {
+public class City  {
 
     @Id
     @Column(name = "id")
@@ -19,19 +18,15 @@ public class City {
     private int id;
 
     @Column(name = "name")
-    @NotNull
     private String name;
 
     @Column(name = "latitude")
-    @NotNull
     private long latitude;
 
     @Column(name = "longitude")
-    @NotNull
     private long longitude;
 
     @Column(name = "havePort")
-    @NotNull
     private boolean havePort;
 
     public City(String name, long latitude, long longitude, boolean havePort) {
@@ -40,4 +35,5 @@ public class City {
         this.longitude = longitude;
         this.havePort = havePort;
     }
+
 }
