@@ -3,16 +3,19 @@ package entity;
 
 import enums.VehicleCondition;
 import enums.VehicleType;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "vehicles")
-public class Vehicle  {
+public class Vehicle {
 
     @Id
     @Column(name = "id")
@@ -32,9 +35,12 @@ public class Vehicle  {
     @Column(name = "capacityInTons")
     private int capacityInTons;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cargo")
     private Cargo cargo;
+
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
+    private List<Driver> drivers;
 
     @Column(name = "vehicleCondition")
     @Enumerated(EnumType.STRING)
@@ -44,7 +50,7 @@ public class Vehicle  {
     @JoinColumn(name = "city")
     private City currentCity;
 
-    public Vehicle(String name, VehicleType vehicleType,  int driversCount,int capacityInTons, VehicleCondition condition, City currentCity) {
+    public Vehicle(String name, VehicleType vehicleType, int driversCount, int capacityInTons, VehicleCondition condition, City currentCity) {
         this.name = name;
         this.vehicleType = vehicleType;
         this.driversCount = driversCount;

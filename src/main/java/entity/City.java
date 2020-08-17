@@ -2,15 +2,18 @@ package entity;
 
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "cities")
-public class City  {
+public class City {
 
     @Id
     @Column(name = "id")
@@ -21,10 +24,10 @@ public class City  {
     private String name;
 
     @Column(name = "latitude")
-    private long latitude;
+    private double latitude;
 
     @Column(name = "longitude")
-    private long longitude;
+    private double longitude;
 
     @Column(name = "havePort")
     private boolean havePort;

@@ -1,4 +1,7 @@
 package exception;
 
-public class VehicleHaveCargoException {
+public class VehicleHaveCargoException extends RuntimeException {
+    public VehicleHaveCargoException(String message) {
+        super(message);
+    }
 }

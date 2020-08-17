@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.DriverService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -13,31 +14,31 @@ import java.util.List;
 @RequestMapping("/drivers")
 public class DriverController {
 
-    DriverService driverService;
+    private DriverService driverService;
 
     @Autowired
     public DriverController(DriverService driverService) {
-        this.driverService=driverService;
+        this.driverService = driverService;
     }
 
     @GetMapping("")
-    public List<DriverDto> hey(){
+    public List<DriverDto> listAllDrivers() {
         return driverService.getAllDrivers();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id){
+    public void delete(@PathVariable String id) {
         driverService.deleteDriver(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody DriverDto driverDto){
+    public void add(@RequestBody @Valid DriverDto driverDto) {
         driverService.addDriver(driverDto);
     }
 
-    @PostMapping("/update/{id}")
-    public void update(@PathVariable int id ,@RequestBody DriverDto driverDto){
-        driverService.update(id,driverDto);
+    @PutMapping("/update/{id}")
+    public void update(@PathVariable String id, @RequestBody @Valid DriverDto driverDto) {
+        driverService.update(id, driverDto);
     }
 
 }

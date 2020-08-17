@@ -39,6 +39,72 @@
       <version>5.1.4.RELEASE</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>5.1.14.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>5.1.4.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-dbcp</artifactId>
+      <version>9.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>5.1.4.RELEASE</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>5.1.4.RELEASE</version>
+    </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/javax.interceptor/javax.interceptor-api -->
+    <dependency>
+      <groupId>javax.interceptor</groupId>
+      <artifactId>javax.interceptor-api</artifactId>
+      <version>1.2.2</version>
+    </dependency>
+
+    <!-- Spring Security -->
+    <!-- spring-security-web and spring-security-config -->
+    <dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-web</artifactId>
+    <version>5.1.4.RELEASE</version>
+  </dependency>
+    <dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-config</artifactId>
+    <version>5.1.4.RELEASE</version>
+  </dependency>
+    <!-- Add Spring Security Taglibs support -->
+    <dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-taglibs</artifactId>
+    <version>5.1.4.RELEASE</version>
+  </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -62,27 +128,9 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>5.2.6.RELEASE</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.webjars.bower/bootstrap -->
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>bootstrap</artifactId>
-      <version>4.5.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-      <version>3.3.1-1</version>
+      <version>5.1.4.RELEASE</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.webjars/popper.js -->
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>popper.js</artifactId>
-      <version>1.14.1</version>
-    </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>

@@ -1,9 +1,8 @@
 package dao;
 
-import entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,23 +10,14 @@ import java.util.List;
 @Component
 abstract class AbstractDao<T> implements Dao<T> {
 
+    @Autowired
     SessionFactory sessionFactory;
 
-    AbstractDao() {
-        this.sessionFactory =  new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Driver.class)
-                .addAnnotatedClass(Order.class)
-                .addAnnotatedClass(Cargo.class)
-                .addAnnotatedClass(City.class)
-                .addAnnotatedClass(Vehicle.class)
-                .addAnnotatedClass(Waypoint.class)
-                .buildSessionFactory();
-    }
 
     @Override
     public void add(T t) {
         Session session = this.sessionFactory.getCurrentSession();
+        if(!session.getTransaction().isActive())
         session.beginTransaction();
         session.save(t);
         session.getTransaction().commit();
@@ -46,7 +36,8 @@ abstract class AbstractDao<T> implements Dao<T> {
     @Override
     public void update(T t) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
+        if (!session.getTransaction().isActive())
+            session.beginTransaction();
         session.update(t);
         session.getTransaction().commit();
 
@@ -57,8 +48,9 @@ abstract class AbstractDao<T> implements Dao<T> {
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
         List entities = session.createQuery("from "
-                + this.getClass().getSimpleName().replaceAll("Dao","")).list();
+                + this.getClass().getSimpleName().replaceAll("Dao", "")).list();
         session.getTransaction().commit();
+
         return entities;
     }
 }

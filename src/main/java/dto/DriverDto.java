@@ -3,23 +3,32 @@ package dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 
 @Data
 @NoArgsConstructor
 public class DriverDto implements Dto {
 
+
     private int id;
 
+    @NotNull
+    @Pattern(regexp = "^[A-Za-z]+$", message = "First Name Invalid")
     private String firstName;
 
+    @NotNull
+    @Pattern(regexp = "^[A-Za-z]+$", message = "Last Name Invalid")
     private String lastName;
 
-    private String  driverType;
+    private String driverType;
 
     private Integer workingHours;
 
     private String status;
 
+    @NotNull
     private String currentCity;
 
     private String vehicle;

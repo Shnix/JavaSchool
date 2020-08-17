@@ -2,11 +2,16 @@ package entity;
 
 import enums.OperationType;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "waypoints")
@@ -19,11 +24,8 @@ public class Waypoint {
 
     @OneToOne
     @JoinColumn(name = "city")
+    @Cascade({CascadeType.SAVE_UPDATE})
     private City city;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cargo")
-    private  Cargo cargo;
 
     @Column(name = "operationType")
     @Enumerated(EnumType.STRING)
@@ -33,9 +35,8 @@ public class Waypoint {
     @JoinColumn(name = "`order`")
     private Order order;
 
-    public Waypoint(City city,Cargo cargo, OperationType operationType,Order order) {
+    public Waypoint(City city, OperationType operationType, Order order) {
         this.city = city;
-        this.cargo = cargo;
         this.operationType = operationType;
         this.order = order;
     }

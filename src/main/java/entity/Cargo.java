@@ -1,14 +1,16 @@
 package entity;
 
 import enums.CargoStatus;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "cargoes")
-@Data
 @NoArgsConstructor
 public class Cargo {
 
@@ -26,6 +28,9 @@ public class Cargo {
     @Column(name = "cargoStatus")
     @Enumerated(EnumType.STRING)
     private CargoStatus cargoStatus;
+
+    @OneToOne(mappedBy = "cargo", fetch = FetchType.EAGER)
+    private Vehicle vehicle;
 
     public Cargo(String name, int weight, CargoStatus cargoStatus) {
         this.name = name;
