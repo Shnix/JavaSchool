@@ -22,6 +22,8 @@ public class OrderService {
 
     private OrderDao orderDao;
 
+    private CityService cityService;
+
     private CompleteOrderDao completeOrderDao;
 
     private Converter<Order, OrderDto> converter;
@@ -40,7 +42,7 @@ public class OrderService {
     public OrderService(OrderDao orderDao, OrderConverter converter, CargoService cargoService,
                         DriverService driverService, VehicleService vehicleService,
                         WaypointService waypointService, WorkingHoursCalculator workingHoursCalculator,
-                        CompleteOrderDao completeOrderDao) {
+                        CompleteOrderDao completeOrderDao, CityService cityService) {
         this.orderDao = orderDao;
         this.converter = converter;
         this.cargoService = cargoService;
@@ -49,6 +51,7 @@ public class OrderService {
         this.waypointService = waypointService;
         this.workingHoursCalculator = workingHoursCalculator;
         this.completeOrderDao = completeOrderDao;
+        this.cityService=cityService;
     }
 
     public List<OrderDto> getAllOrders() {
@@ -93,10 +96,12 @@ public class OrderService {
         Set<Driver> drivers = order.getDrivers();
         drivers.forEach(o -> o.setOrder(null));
         drivers.forEach(o -> o.setVehicle(null));
+        drivers.forEach(o->o.setCurrentCity(cityService.getByName(completeOrder.getDestinationCity())));
         drivers.forEach(driverService::updateInDB);
 
         Vehicle vehicle = order.getVehicle();
         vehicle.setCargo(null);
+        vehicle.setCurrentCity(cityService.getByName(completeOrder.getDestinationCity()));
         vehicleService.updateInDB(vehicle);
 
         order.setVehicle(null);

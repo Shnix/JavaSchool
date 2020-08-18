@@ -60,6 +60,7 @@ public class DriverService {
         driver.setFirstName(driverDto.getFirstName());
         driver.setLastName(driverDto.getLastName());
         driver.setCurrentCity(cityDao.getByName(driverDto.getCurrentCity()));
+        driver.setWorkingHours(driverDto.getWorkingHours());
         driverDao.update(driver);
     }
 
