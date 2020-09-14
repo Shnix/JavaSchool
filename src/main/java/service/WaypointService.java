@@ -42,7 +42,7 @@ public class WaypointService {
         Order order = driver.getOrder();
 
         return order.getWaypoints().stream()
-                .filter(o->o.getOperationType().equals(OperationType.LOADING))
+                .filter(waypoint->waypoint.getOperationType().equals(OperationType.LOADING))
                 .findFirst().get().getCity().getName();
     }
 
@@ -50,7 +50,7 @@ public class WaypointService {
         Order order = driver.getOrder();
 
         return order.getWaypoints().stream()
-                .filter(o->o.getOperationType().equals(OperationType.UNLOADING))
+                .filter(waypoint->waypoint.getOperationType().equals(OperationType.UNLOADING))
                 .findFirst().get().getCity().getName();
     }
 }

@@ -61,7 +61,7 @@ public class OrderService {
     public List<OrderDto> getAllOrders() {
         List<Order> orders = orderDao.list();
         return orders.stream()
-                .map(o -> converter.convertIntoDto(o))
+                .map(order -> converter.convertIntoDto(order))
                 .collect(Collectors.toList());
     }
 
@@ -75,21 +75,21 @@ public class OrderService {
         //Find drivers
         Set<Driver> drivers = driverService.selectDrivers(orderDto);
         Vehicle vehicle = vehicleService.getVehicleForOrder(orderDto);
-        drivers.forEach(o -> o.setVehicle(vehicle));
+        drivers.forEach(driver -> driver.setVehicle(vehicle));
         vehicle.setCargo(cargo);
         vehicle.setDrivers(new ArrayList<>(drivers));
 
         //Create Waypoints
         Set<Waypoint> waypoints = waypointService.createWaypoints(orderDto);
-        waypoints.forEach(o -> o.setOrder(order));
+        waypoints.forEach(waypoint -> waypoint.setOrder(order));
 
         //Update all entities and calc working hours
         order.setDrivers(drivers);
         order.setVehicle(vehicle);
         order.setWaypoints(waypoints);
         orderDao.add(order);
-        drivers.forEach(o -> o.setWorkingHours(workingHoursCalculator.calculateWorkingHours(orderDto)));
-        drivers.forEach(o -> o.setOrder(order));
+        drivers.forEach(driver -> driver.setWorkingHours(driver.getWorkingHours() + workingHoursCalculator.calculateWorkingHours(orderDto)));
+        drivers.forEach(driver -> driver.setOrder(order));
         drivers.forEach(driverService::updateInDB);
         vehicleService.updateInDB(vehicle);
         publisher.publishCustomEvent();
@@ -104,9 +104,9 @@ public class OrderService {
 
         //Unpin order and vehicle from drivers
         Set<Driver> drivers = order.getDrivers();
-        drivers.forEach(o -> o.setOrder(null));
-        drivers.forEach(o -> o.setVehicle(null));
-        drivers.forEach(o->o.setCurrentCity(cityService.getByName(completeOrder.getDestinationCity())));
+        drivers.forEach(driver -> driver.setOrder(null));
+        drivers.forEach(driver -> driver.setVehicle(null));
+        drivers.forEach(driver->driver.setCurrentCity(cityService.getByName(completeOrder.getDestinationCity())));
         drivers.forEach(driverService::updateInDB);
 
         //Unpin cargo from vehicle

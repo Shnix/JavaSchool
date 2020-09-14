@@ -51,7 +51,7 @@ public class DriverService {
         List<Driver> drivers = driverDao.list();
         return drivers.stream()
                 .filter(driver -> !driver.isDeleted())
-                .map(o -> converter.convertIntoDto(o))
+                .map(driver -> converter.convertIntoDto(driver))
                 .collect(Collectors.toList());
     }
 
@@ -94,7 +94,7 @@ public class DriverService {
     }
 
     public void removeVehicles(List<Driver> drivers) {
-        drivers.forEach(o -> o.setVehicle(null));
+        drivers.forEach(driver -> driver.setVehicle(null));
         drivers.forEach(driverDao::update);
         publisher.publishCustomEvent();
     }
