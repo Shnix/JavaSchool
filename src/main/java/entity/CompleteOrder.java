@@ -36,6 +36,6 @@ public class CompleteOrder {
     private String cargoName;
 
     @Column(name = "cargoWeight")
-    private String cargoWeight;
+    private Integer cargoWeight;
 
 }

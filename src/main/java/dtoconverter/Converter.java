@@ -1,6 +1,6 @@
 package dtoconverter;
 
-public interface Converter<T,K> {
+public interface Converter<T, K> {
 
     T convertFromDto(K k);
 

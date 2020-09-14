@@ -10,6 +10,9 @@ import dtoconverter.VehicleConverter;
 import entity.Driver;
 import entity.Vehicle;
 import enums.VehicleCondition;
+import enums.VehicleType;
+import eventlistener.CustomPublisher;
+import exception.ServiceLayerException;
 import exception.VehicleHaveCargoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,17 +34,23 @@ public class VehicleService {
 
     private Converter<Vehicle, VehicleDto> converter;
 
+    private CustomPublisher publisher;
+
     @Autowired
-    public VehicleService(VehicleDao vehicleDao, VehicleConverter converter, CityDao cityDao, DriverService driverService) {
+    public VehicleService(VehicleDao vehicleDao, VehicleConverter converter, CityDao cityDao,
+                          DriverService driverService, CustomPublisher publisher) {
         this.vehicleDao = vehicleDao;
         this.converter = converter;
         this.cityDao = cityDao;
         this.driverService = driverService;
+        this.publisher=publisher;
     }
 
     public List<VehicleDto> getAllVehicles() {
         List<Vehicle> vehicles = vehicleDao.list();
-        return vehicles.stream().map(o -> converter.convertIntoDto(o))
+        return vehicles.stream()
+                .filter(vehicle -> !vehicle.isDeleted())
+                .map(o -> converter.convertIntoDto(o))
                 .collect(Collectors.toList());
     }
 
@@ -52,12 +61,15 @@ public class VehicleService {
         }
         List<Driver> drivers = vehicle.getDrivers();
         driverService.removeVehicles(drivers);
-        vehicleDao.delete(vehicle);
+        vehicle.setDeleted(true);
+        vehicleDao.update(vehicle);
+        publisher.publishCustomEvent();
     }
 
     public void addVehicle(VehicleDto vehicleDto) {
         Vehicle vehicle = converter.convertFromDto(vehicleDto);
         vehicleDao.add(vehicle);
+        publisher.publishCustomEvent();
     }
 
     public void update(String id, VehicleDto vehicleDto) {
@@ -67,6 +79,7 @@ public class VehicleService {
         vehicle.setCurrentCity(cityDao.getByName(vehicleDto.getCurrentCity()));
         vehicle.setCondition(VehicleCondition.valueOf(vehicleDto.getCondition().toUpperCase()));
         vehicleDao.update(vehicle);
+        publisher.publishCustomEvent();
     }
 
     public void updateInDB(Vehicle vehicle) {
@@ -76,8 +89,41 @@ public class VehicleService {
     public Vehicle getVehicleForOrder(OrderDto orderDto) {
         Vehicle vehicle = vehicleDao.getVehicleForOrder(orderDto);
         if (vehicle.getName() == null) {
-            throw new RuntimeException("Can't get Vehicle.");
+            throw new ServiceLayerException("No Vehicle for this order.");
         }
         return vehicle;
     }
+
+    public Integer getAvailableVehiclesCount(VehicleType vehicleType){
+        return vehicleDao.list().stream()
+                .filter(vehicle -> !vehicle.isDeleted())
+                .filter(vehicle -> vehicle.getVehicleType().equals(vehicleType))
+                .filter(vehicle -> vehicle.getCondition().equals(VehicleCondition.OK))
+                .filter(vehicle -> vehicle.getCargo()==null)
+                .collect(Collectors.toList())
+                .size();
+    }
+
+    public Integer getUnavailableVehiclesCount(VehicleType vehicleType){
+        return vehicleDao.list().stream()
+                .filter(vehicle -> !vehicle.isDeleted())
+                .filter(vehicle -> vehicle.getVehicleType().equals(vehicleType))
+                .filter(vehicle -> vehicle.getCondition().equals(VehicleCondition.OK))
+                .filter(vehicle -> vehicle.getCargo()!=null)
+                .collect(Collectors.toList())
+                .size();
+    }
+
+    public Integer getBrokenVehiclesCount(VehicleType vehicleType){
+        return vehicleDao.list().stream()
+                .filter(vehicle -> !vehicle.isDeleted())
+                .filter(vehicle -> vehicle.getVehicleType().equals(vehicleType))
+                .filter(vehicle -> vehicle.getCondition().equals(VehicleCondition.BROKEN))
+                .collect(Collectors.toList())
+                .size();
+    }
+
+
+
+
 }

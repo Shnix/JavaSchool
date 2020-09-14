@@ -27,18 +27,18 @@ public class DriverController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
+    public void deleteDriver(@PathVariable String id) {
         driverService.deleteDriver(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid DriverDto driverDto) {
+    public void addDriver(@RequestBody @Valid DriverDto driverDto) {
         driverService.addDriver(driverDto);
     }
 
     @PutMapping("/update/{id}")
-    public void update(@PathVariable String id, @RequestBody @Valid DriverDto driverDto) {
-        driverService.update(id, driverDto);
+    public void updateDriver(@PathVariable String id, @RequestBody @Valid DriverDto driverDto) {
+        driverService.updateDriver(id, driverDto);
     }
 
 }

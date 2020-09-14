@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class OrderConverter implements Converter<Order, OrderDto> {
 
     @Override
-    public Order convertFromDto(OrderDto orderDto)  {
+    public Order convertFromDto(OrderDto orderDto) {
         throw new RuntimeException("cant use dis");
     }
 

@@ -27,7 +27,7 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid OrderDto orderDto) {
+    public void addOrder(@RequestBody @Valid OrderDto orderDto) {
         orderService.configureAndAddOrder(orderDto);
     }
 

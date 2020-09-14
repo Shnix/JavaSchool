@@ -27,17 +27,17 @@ public class VehicleController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
+    public void deleteVehicle(@PathVariable String id) {
         vehicleService.deleteVehicle(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid VehicleDto vehicleDto) {
+    public void addVehicle(@RequestBody @Valid VehicleDto vehicleDto) {
         vehicleService.addVehicle(vehicleDto);
     }
 
     @PutMapping("/update/{id}")
-    public void update(@PathVariable String id, @RequestBody @Valid VehicleDto vehicleDto) {
+    public void updateVehicle(@PathVariable String id, @RequestBody @Valid VehicleDto vehicleDto) {
         vehicleService.update(id, vehicleDto);
     }
 }

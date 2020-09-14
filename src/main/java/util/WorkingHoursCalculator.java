@@ -2,6 +2,7 @@ package util;
 
 import dto.OrderDto;
 import entity.City;
+import exception.ServiceLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import service.CityService;
@@ -42,7 +43,7 @@ public class WorkingHoursCalculator {
         double distance = DistanceCalculator.calculateDistance(start, destination);
         int workingHours = (int) (distance / BOAT_AVERAGE_SPEED);
         if (workingHours > MAX_WORKING_HOURS) {
-            throw new RuntimeException(TIME_EXCEPTION_MESSAGE);
+            throw new ServiceLayerException(TIME_EXCEPTION_MESSAGE);
         }
         return workingHours + PREPARATION_TIME;
     }
@@ -51,7 +52,7 @@ public class WorkingHoursCalculator {
         double distance = DistanceCalculator.calculateDistance(start, destination);
         int workingHours = (int) (distance / PLAIN_AVERAGE_SPEED);
         if (workingHours > MAX_WORKING_HOURS) {
-            throw new RuntimeException(TIME_EXCEPTION_MESSAGE);
+            throw new ServiceLayerException(TIME_EXCEPTION_MESSAGE);
         }
         return workingHours + PREPARATION_TIME;
     }

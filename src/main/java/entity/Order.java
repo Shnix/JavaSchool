@@ -42,11 +42,11 @@ public class Order {
     private Set<Driver> drivers;
 
 
-    public CompleteOrder convertIntoCompleteOrder(){
+    public CompleteOrder convertIntoCompleteOrder() {
         CompleteOrder completeOrder = new CompleteOrder();
         completeOrder.setOrderId(String.valueOf(this.getId()));
         completeOrder.setCargoName(this.getCargo().getName());
-        completeOrder.setCargoWeight(String.valueOf(this.getCargo().getWeight()));
+        completeOrder.setCargoWeight(this.getCargo().getWeight());
         completeOrder.setVehicleName(this.getVehicle().getName());
 
         Waypoint[] waypoints = this.getWaypoints().toArray(new Waypoint[0]);

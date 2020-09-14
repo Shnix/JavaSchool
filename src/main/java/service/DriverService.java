@@ -9,8 +9,15 @@ import dtoconverter.DriverConverter;
 import entity.Driver;
 import enums.DriverStatus;
 import enums.VehicleType;
+import eventlistener.CustomPublisher;
+import eventlistener.UpdateEvent;
 import exception.DriverExecutingOrderException;
+import exception.ServiceLayerException;
+import messaging.MessageSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,16 +36,22 @@ public class DriverService {
 
     private Converter<Driver, DriverDto> converter;
 
+    private CustomPublisher publisher;
+
     @Autowired
-    public DriverService(DriverDao driverDao, CityDao cityDao, DriverConverter converter) {
+    public DriverService(DriverDao driverDao, CityDao cityDao, DriverConverter converter,
+                        CustomPublisher publisher ) {
         this.cityDao = cityDao;
         this.driverDao = driverDao;
         this.converter = converter;
+        this.publisher=publisher;
     }
 
     public List<DriverDto> getAllDrivers() {
         List<Driver> drivers = driverDao.list();
-        return drivers.stream().map(o -> converter.convertIntoDto(o))
+        return drivers.stream()
+                .filter(driver -> !driver.isDeleted())
+                .map(o -> converter.convertIntoDto(o))
                 .collect(Collectors.toList());
     }
 
@@ -47,28 +60,33 @@ public class DriverService {
         if (driver.getOrder() != null && !driver.getOrder().isComplete()) {
             throw new DriverExecutingOrderException("Driver executing order. Can't be deleted.");
         }
-        driverDao.delete(driver);
+        publisher.publishCustomEvent();
+        driver.setDeleted(true);
+        driverDao.update(driver);
     }
 
     public void addDriver(DriverDto driver) {
         Driver driver1 = converter.convertFromDto(driver);
         driverDao.add(driver1);
+        publisher.publishCustomEvent();
     }
 
-    public void update(String id, DriverDto driverDto) {
+    public void updateDriver(String id, DriverDto driverDto) {
         Driver driver = driverDao.getById(Integer.parseInt(id));
         driver.setFirstName(driverDto.getFirstName());
         driver.setLastName(driverDto.getLastName());
         driver.setCurrentCity(cityDao.getByName(driverDto.getCurrentCity()));
         driver.setWorkingHours(driverDto.getWorkingHours());
         driverDao.update(driver);
+        publisher.publishCustomEvent();
     }
 
-    public void updateStatus(String id, String status){
+    public void updateDriverStatus(String id, String status){
         Driver driver = driverDao.getById(Integer.parseInt(id));
         String trim = status.replaceAll("\"","");
         driver.setStatus(DriverStatus.valueOf(trim.toUpperCase()));
         driverDao.update(driver);
+        publisher.publishCustomEvent();
     }
 
     public void updateInDB(Driver driver) {
@@ -78,6 +96,7 @@ public class DriverService {
     public void removeVehicles(List<Driver> drivers) {
         drivers.forEach(o -> o.setVehicle(null));
         drivers.forEach(driverDao::update);
+        publisher.publishCustomEvent();
     }
 
     public HashSet selectDrivers(OrderDto orderDto) {
@@ -85,7 +104,7 @@ public class DriverService {
         VehicleType vehicleType = VehicleType.valueOf(orderDto.getVehicleType().toUpperCase());
 
         if (!checkDrivers(drivers, vehicleType)) {
-            throw new RuntimeException("Unable to select drivers");
+            throw new ServiceLayerException("Unable to select drivers");
         }
 
         if (vehicleType.equals(VehicleType.BOAT)) {
@@ -103,6 +122,21 @@ public class DriverService {
             return false;
         }
         return true;
+    }
+
+    public Integer getAvailableDriversCount(){
+        return Math.toIntExact(driverDao.list().stream()
+                .filter(driver -> !driver.isDeleted())
+                .filter(driver -> driver.getStatus().equals(DriverStatus.REST))
+                .filter(driver -> driver.getOrder()==null)
+                .count());
+    }
+
+    public Integer getUnavailableDriversCount(){
+        return Math.toIntExact(driverDao.list().stream()
+                .filter(driver -> !driver.isDeleted())
+                .filter(driver -> driver.getOrder()!=null)
+                .count());
     }
 
 

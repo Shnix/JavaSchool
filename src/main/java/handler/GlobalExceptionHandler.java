@@ -1,6 +1,8 @@
 package handler;
 
 import exception.DriverExecutingOrderException;
+import exception.SecurityException;
+import exception.ServiceLayerException;
 import exception.VehicleHaveCargoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,17 +63,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleRuntimeException(
-            RuntimeException ex, WebRequest request) {
-        LOGGER.warn(ex.getMessage());
+    @ExceptionHandler(ServiceLayerException.class)
+    public ResponseEntity<Object> handleServiceLayerException(
+            ServiceLayerException ex, WebRequest request) {
+        LOGGER.info(ex.getMessage());
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDate.now());
-        ex.printStackTrace();
         ArrayList<String> exceptions = new ArrayList<>();
         exceptions.add(ex.getMessage());
         body.put("errors", exceptions);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleOtherExceptions(
+            Exception ex, WebRequest request) {
+        LOGGER.warn(ex.getMessage());
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 

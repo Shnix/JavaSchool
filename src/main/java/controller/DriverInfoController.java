@@ -42,12 +42,12 @@ public class DriverInfoController {
     }
 
     @PutMapping("/updateStatus/{id}")
-    public void updateDriverStatus(@PathVariable String id,@RequestBody String status){
-        driverService.updateStatus(id,status);
+    public void updateDriverStatus(@PathVariable String id, @RequestBody String status) {
+        driverService.updateDriverStatus(id, status);
     }
 
     @PutMapping("/updateCargo/{id}")
-    public void updateCargoStatus(@PathVariable String id, @RequestBody String cargoStatus){
-        cargoService.updateStatus(id,cargoStatus);
+    public void updateCargoStatus(@PathVariable String id, @RequestBody String cargoStatus) {
+        cargoService.updateStatus(id, cargoStatus);
     }
 }

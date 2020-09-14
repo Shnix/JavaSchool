@@ -30,4 +30,15 @@ public class CompleteOrderService {
         return completeOrderDao.list().stream().map(o -> converter.convertIntoDto(o))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Returns last 10 orders
+     *
+     * @return List of OrderDto
+     */
+    public List<CompleteOrderDto> getLastTenOrders(){
+        return completeOrderDao.getLastTenOrders().stream()
+                .map(order -> converter.convertIntoDto(order))
+                .collect(Collectors.toList());
+    }
 }

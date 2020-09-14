@@ -29,11 +29,13 @@ public class DriverConverter implements Converter<Driver, DriverDto> {
         driverDto.setLastName(driver.getLastName());
         driverDto.setCurrentCity(driver.getCurrentCity().getName());
         driverDto.setDriverType(driver.getDriverType().toString());
-        if (driver.getOrder() != null)
+        if (driver.getOrder() != null) {
             driverDto.setOrder(driver.getOrder().getId());
+        }
         driverDto.setStatus(driver.getStatus().name());
-        if (driver.getVehicle() != null)
+        if (driver.getVehicle() != null) {
             driverDto.setVehicle(driver.getVehicle().getName());
+        }
         driverDto.setWorkingHours(driver.getWorkingHours());
         return driverDto;
     }

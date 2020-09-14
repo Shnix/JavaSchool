@@ -46,6 +46,9 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     private VehicleCondition condition;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @OneToOne
     @JoinColumn(name = "city")
     private City currentCity;

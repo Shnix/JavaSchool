@@ -19,9 +19,9 @@ public class CompleteOrderDto {
 
     private String cargoName;
 
-    private String cargoWeight;
+    private Integer cargoWeight;
 
-    public CompleteOrderDto(String orderId, String startCity, String destinationCity, String vehicleName, String cargoName, String cargoWeight) {
+    public CompleteOrderDto(String orderId, String startCity, String destinationCity, String vehicleName, String cargoName, Integer cargoWeight) {
         this.orderId = orderId;
         this.startCity = startCity;
         this.destinationCity = destinationCity;

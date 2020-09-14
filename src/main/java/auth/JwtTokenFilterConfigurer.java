@@ -1,23 +1,22 @@
 package auth;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.Serializable;
+public class JwtTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-@Getter
-@Setter
-public class JwtRequest implements Serializable {
-    private static final long serialVersionUID = 5926468583005150707L;
-    private String username;
-    private String password;
-    //need default constructor for JSON Parsing
-    public JwtRequest()
-    {
+    private JwtTokenProvider jwtTokenProvider;
+
+    public JwtTokenFilterConfigurer(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
-    public JwtRequest(String username, String password) {
-        this.setUsername(username);
-        this.setPassword(password);
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider);
+        http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

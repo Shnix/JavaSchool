@@ -49,6 +49,9 @@ public class Driver {
     @JoinColumn(name = "`order`")
     private Order order;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     public Driver(String firstName, String lastName, DriverType driverType, int workingHours, DriverStatus status, City currentCity) {
         this.firstName = firstName;
         this.lastName = lastName;

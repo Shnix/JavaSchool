@@ -24,9 +24,8 @@ public class DriverInfoConverter implements Converter<Driver, DriverInfoDto> {
     @Override
     public DriverInfoDto convertIntoDto(Driver driver) {
         if (driver.getOrder() != null) {
-           return convertWithOrder(driver);
-        }
-        else {
+            return convertWithOrder(driver);
+        } else {
             return DriverInfoDto.builder()
                     .id(driver.getId())
                     .firstName(driver.getFirstName())
